@@ -1,0 +1,67 @@
+plugins {
+	id "java"
+	id "application"
+	id "idea"
+	id 'com.github.ben-manes.versions'
+
+	id 'org.springframework.boot'
+	id 'io.spring.dependency-management'
+	id 'org.asciidoctor.jvm.convert'
+}
+
+group = 'com.sky'
+version = '0.0.1-SNAPSHOT'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+//	cargo {
+//		description = 'Classpath for Cargo Ant tasks.'
+//		visible = false
+//	}
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencies {
+    compile project(":generated")
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.2.2.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.2.2.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.2.2.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-web:2.2.2.RELEASE'
+	compileOnly 'org.projectlombok:lombok:1.18.10'
+	//	developmentOnly 'org.springframework.boot:spring-boot-devtools:2.2.2.RELEASE'
+	annotationProcessor 'org.projectlombok:lombok:1.18.10'
+	testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.2.RELEASE') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+
+	// https://mvnrepository.com/artifact/mysql/mysql-connector-java
+	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.18'
+
+	// https://mvnrepository.com/artifact/com.alibaba.boot/dubbo-spring-boot-starter
+	compile (group: 'com.alibaba.boot', name: 'dubbo-spring-boot-starter', version: '0.2.1.RELEASE') {
+		exclude(module: 'org.apache.zookeeper')
+	}
+	compile 'org.apache.zookeeper:zookeeper:3.4.13'
+
+	// https://mvnrepository.com/artifact/com.alibaba/dubbo
+    compile group: 'com.alibaba', name: 'dubbo', version: '2.6.7'
+	// https://mvnrepository.com/artifact/org.apache.curator/curator-framework
+	compile group: 'org.apache.curator', name: 'curator-framework', version: '4.2.0'
+
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+}
+
+//指定 Jar 启动 Main
+mainClassName = 'com.sky.grpc.GrpcApplication'

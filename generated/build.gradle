@@ -1,0 +1,116 @@
+plugins {
+    id "com.google.protobuf"
+    id "java"
+    id "application"
+    id "idea"
+//    id 'com.github.ben-manes.versions'
+
+//    id 'org.springframework.boot'
+//    id 'io.spring.dependency-management'
+//    id 'org.asciidoctor.convert'
+}
+
+group = 'com.sky'
+version = '0.0.1-SNAPSHOT'
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+//    cargo {
+//        description = 'Classpath for Cargo Ant tasks.'
+//        visible = false
+//    }
+}
+
+sourceSets {
+	main {
+		proto {
+			srcDir 'src/main/proto'
+		}
+		java {
+			// include self written and generated code
+			srcDirs 'src/main/java'
+		}
+	}
+	// remove the test configuration - at least in your example you don't have a special test proto file
+}
+
+protobuf {
+    protoc {
+        // The version of protoc must match protobuf-java. If you don't depend on
+        // protobuf-java directly, you will be transitively depending on the
+        // protobuf-java version that grpc depends on.
+        artifact = "com.google.protobuf:protoc:3.11.1"
+//        artifact = "org.apache.dubbo:protoc-gen-dubbo-java:1.19.0-SNAPSHOT"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.25.0'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+    generatedFilesBaseDir = "$projectDir/src"
+//    project.getObjects().directoryProperty().file("$projectDir/src")
+}
+
+
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencies {
+    compile 'io.grpc:grpc-all:1.25.0'
+
+// https://mvnrepository.com/artifact/com.dyuproject.protostuff/protostuff-core
+    compile group: 'com.dyuproject.protostuff', name: 'protostuff-core', version: '1.1.5'
+
+    // https://mvnrepository.com/artifact/com.dyuproject.protostuff/protostuff-runtime
+    compile group: 'com.dyuproject.protostuff', name: 'protostuff-runtime', version: '1.1.5'
+
+    // https://mvnrepository.com/artifact/org.objenesis/objenesis
+    compile group: 'org.objenesis', name: 'objenesis', version: '3.1'
+
+
+}
+
+idea {
+    module {
+        sourceDirs += file("${projectDir}/src/main/java");
+        sourceDirs += file("${projectDir}/src/main/grpc");
+    }
+}
+
+//clean {
+//    delete "${protobuf.generatedFilesBaseDir}/main/java"
+//    delete "${protobuf.generatedFilesBaseDir}/main/grpc"
+//}
+
+//idea {
+//    module {
+//        sourceDirs += file("${protobuf.generatedFilesBaseDir}/main/java")
+//        sourceDirs += file("${protobuf.generatedFilesBaseDir}/main/grpc")
+//    }
+//}
+//
+//sourceSets {
+//    main {
+//        java {
+//            srcDirs += "${protobuf.generatedFilesBaseDir}/main/java"
+//            srcDirs += "${protobuf.generatedFilesBaseDir}/main/grpc"
+//        }
+//    }
+//}
+
+//指定 Jar 启动 Main
+mainClassName = ''
