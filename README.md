@@ -1,2 +1,2 @@
 # grpc
-gprc dubbo protobuf
+grpc dubbo protobuf
