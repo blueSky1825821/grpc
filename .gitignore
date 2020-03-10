@@ -1,12 +1,4 @@
-**/.idea
-**/*.iml
-**/*.gradle
-
-**/.settings
-**/.classpath
-**/.project
-
-**/target
-
-**/*.log
-**/*.log.*.gz
+*.iml
+.idea/
+target/
+**/build
